@@ -19,7 +19,7 @@
     <header class="hero">
       <div class="hero__eyebrow">A personal shortlist</div>
       <h1>Watch<br><span>Next</span></h1>
-      <p>Twenty carefully chosen stories. No endless scrolling.</p>
+      <p>Recommendations and all-time favorites. No endless scrolling.</p>
       <div class="progress" aria-live="polite">
         <div class="progress__copy">
           <span id="progress-label">0 of 10 watched</span>
@@ -39,6 +39,9 @@
         <button class="tab" type="button" data-view="series" aria-selected="false">
           Series <span>10</span>
         </button>
+        <button class="tab" type="button" data-view="favorites" aria-selected="false">
+          My 10s <span>20</span>
+        </button>
       </nav>
 
       <section class="controls" aria-label="Filter watchlist">
@@ -47,7 +50,7 @@
           <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/></svg>
           <input id="search" type="search" placeholder="Search titles" autocomplete="off">
         </label>
-        <div class="filters" role="group" aria-label="Watched status">
+        <div class="filters" id="status-filters" role="group" aria-label="Watched status">
           <button class="filter is-active" type="button" data-filter="all">All</button>
           <button class="filter" type="button" data-filter="unwatched">To watch</button>
           <button class="filter" type="button" data-filter="watched">Watched</button>
