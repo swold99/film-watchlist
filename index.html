@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#151310">
+    <meta name="description" content="A personal shortlist of films and series worth watching next.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Watch Next">
+    <title>Watch Next</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero__eyebrow">A personal shortlist</div>
+      <h1>Watch<br><span>Next</span></h1>
+      <p>Twenty carefully chosen stories. No endless scrolling.</p>
+      <div class="progress" aria-live="polite">
+        <div class="progress__copy">
+          <span id="progress-label">0 of 10 watched</span>
+          <span id="progress-percent">0%</span>
+        </div>
+        <div class="progress__track" aria-hidden="true">
+          <div class="progress__bar" id="progress-bar"></div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <nav class="tabs" aria-label="Watchlist type">
+        <button class="tab is-active" type="button" data-view="films" aria-selected="true">
+          Films <span>10</span>
+        </button>
+        <button class="tab" type="button" data-view="series" aria-selected="false">
+          Series <span>10</span>
+        </button>
+      </nav>
+
+      <section class="controls" aria-label="Filter watchlist">
+        <label class="search">
+          <span class="sr-only">Search titles</span>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/></svg>
+          <input id="search" type="search" placeholder="Search titles" autocomplete="off">
+        </label>
+        <div class="filters" role="group" aria-label="Watched status">
+          <button class="filter is-active" type="button" data-filter="all">All</button>
+          <button class="filter" type="button" data-filter="unwatched">To watch</button>
+          <button class="filter" type="button" data-filter="watched">Watched</button>
+        </div>
+      </section>
+
+      <section class="list-heading">
+        <p id="list-kicker">Films</p>
+        <h2 id="list-title">Your next feature</h2>
+      </section>
+
+      <section id="watchlist" class="watchlist" aria-live="polite"></section>
+      <p id="empty-state" class="empty" hidden>No titles match that filter.</p>
+    </main>
+
+    <footer>
+      <p>Availability checked for Sweden on 7 August 2026.</p>
+      <button id="install-button" class="install" type="button" hidden>Install on this device</button>
+      <p class="ios-hint">On iPhone: tap Share, then “Add to Home Screen” for app-like access.</p>
+    </footer>
+
+    <template id="card-template">
+      <article class="card">
+        <label class="check">
+          <input class="check__input" type="checkbox">
+          <span class="check__box" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>
+          </span>
+          <span class="sr-only">Mark watched</span>
+        </label>
+        <div class="card__body">
+          <div class="card__topline">
+            <span class="card__rank"></span>
+            <span class="card__format"></span>
+          </div>
+          <h3 class="card__title"></h3>
+          <p class="card__reason"></p>
+          <div class="card__links"></div>
+        </div>
+      </article>
+    </template>
+  </body>
+</html>
