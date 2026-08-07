@@ -1,10 +1,10 @@
-const cacheName = "watch-next-v2";
+const cacheName = "watch-next-v3";
 const assets = [
   "./",
   "./index.html",
-  "./styles.css",
-  "./app.js",
-  "./manifest.webmanifest",
+  "./styles.css?v=3",
+  "./app.js?v=3",
+  "./manifest.webmanifest?v=3",
   "./icon.svg",
   "./icon-192.png",
   "./icon-512.png",
