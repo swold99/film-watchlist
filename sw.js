@@ -1,4 +1,4 @@
-const cacheName = "watch-next-v1";
+const cacheName = "watch-next-v2";
 const assets = [
   "./",
   "./index.html",

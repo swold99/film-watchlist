@@ -1,6 +1,7 @@
 # Watch Next
 
-A mobile-first film and series shortlist published with GitHub Pages.
+A mobile-first film and series shortlist published with GitHub Pages, including
+a curated shelf of personal 10/10 favorites.
 
 The site has no build step or third-party dependencies. Watched state is stored
 locally in the browser, and a service worker makes the list available offline

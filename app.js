@@ -95,6 +95,28 @@ const catalog = {
       reason: "The closest match to the Breaking Bad, Narcos, and The Wire side of the ratings history.",
       watch: [{ label: "Netflix", url: "https://www.netflix.com/se/title/80117552" }]
     }
+  ],
+  favorites: [
+    { rank: 1, title: "The Shawshank Redemption", year: "1994", format: "Film", imdb: "tt0111161", reason: "Drama" },
+    { rank: 2, title: "The Dark Knight", year: "2008", format: "Film", imdb: "tt0468569", reason: "Crime · Thriller" },
+    { rank: 3, title: "Pulp Fiction", year: "1994", format: "Film", imdb: "tt0110912", reason: "Crime · Drama" },
+    { rank: 4, title: "Fight Club", year: "1999", format: "Film", imdb: "tt0137523", reason: "Drama · Crime · Thriller" },
+    { rank: 5, title: "Inception", year: "2010", format: "Film", imdb: "tt1375666", reason: "Sci-Fi · Thriller · Adventure" },
+    { rank: 6, title: "Interstellar", year: "2014", format: "Film", imdb: "tt0816692", reason: "Sci-Fi · Adventure · Drama" },
+    { rank: 7, title: "Seven", year: "1995", format: "Film", imdb: "tt0114369", reason: "Mystery · Crime · Thriller" },
+    { rank: 8, title: "The Departed", year: "2006", format: "Film", imdb: "tt0407887", reason: "Crime · Drama · Thriller" },
+    { rank: 9, title: "Gladiator", year: "2000", format: "Film", imdb: "tt0172495", reason: "Action · Adventure · Drama" },
+    { rank: 10, title: "The Intouchables", year: "2011", format: "Film", imdb: "tt1675434", reason: "Comedy · Drama" },
+    { rank: 11, title: "Breaking Bad", year: "2008–2013", format: "Series", imdb: "tt0903747", reason: "Crime · Drama · Thriller" },
+    { rank: 12, title: "The Wire", year: "2002–2008", format: "Series", imdb: "tt0306414", reason: "Crime · Drama · Thriller" },
+    { rank: 13, title: "Chernobyl", year: "2019", format: "Miniseries", imdb: "tt7366338", reason: "Drama · History · Thriller" },
+    { rank: 14, title: "Band of Brothers", year: "2001", format: "Miniseries", imdb: "tt0185906", reason: "History · Drama · War" },
+    { rank: 15, title: "True Detective", year: "2014–", format: "Series", imdb: "tt2356777", reason: "Crime · Drama · Mystery" },
+    { rank: 16, title: "Dark", year: "2017–2020", format: "Series", imdb: "tt5753856", reason: "Mystery · Crime · Sci-Fi" },
+    { rank: 17, title: "Sherlock", year: "2010–2017", format: "Series", imdb: "tt1475582", reason: "Crime · Mystery · Drama" },
+    { rank: 18, title: "The Bear", year: "2022–", format: "Series", imdb: "tt14452776", reason: "Drama · Comedy" },
+    { rank: 19, title: "The Office", year: "2005–2013", format: "Series", imdb: "tt0386676", reason: "Comedy" },
+    { rank: 20, title: "Narcos", year: "2015–2017", format: "Series", imdb: "tt2707408", reason: "Crime · Drama · Biography" }
   ]
 };
 
@@ -116,6 +138,7 @@ const progressBar = document.querySelector("#progress-bar");
 const listKicker = document.querySelector("#list-kicker");
 const listTitle = document.querySelector("#list-title");
 const installButton = document.querySelector("#install-button");
+const statusFilters = document.querySelector("#status-filters");
 
 function loadWatched() {
   try {
@@ -136,6 +159,9 @@ function itemKey(item) {
 function render() {
   const items = catalog[state.view];
   const visible = items.filter((item) => {
+    if (state.view === "favorites") {
+      return `${item.title} ${item.year} ${item.reason}`.toLowerCase().includes(state.search);
+    }
     const watched = state.watched.has(itemKey(item));
     const statusMatch = state.filter === "all" || (state.filter === "watched" ? watched : !watched);
     const textMatch = `${item.title} ${item.year} ${item.reason}`.toLowerCase().includes(state.search);
@@ -146,18 +172,38 @@ function render() {
   for (const item of visible) list.append(createCard(item));
   emptyState.hidden = visible.length > 0;
 
-  const watchedCount = items.filter((item) => state.watched.has(itemKey(item))).length;
-  const percent = Math.round((watchedCount / items.length) * 100);
-  progressLabel.textContent = `${watchedCount} of ${items.length} watched`;
-  progressPercent.textContent = `${percent}%`;
-  progressBar.style.width = `${percent}%`;
-  listKicker.textContent = state.view === "films" ? "Films" : "Series";
-  listTitle.textContent = state.view === "films" ? "Your next feature" : "Your next obsession";
+  if (state.view === "favorites") {
+    progressLabel.textContent = `${items.length} personal favorites`;
+    progressPercent.textContent = "10/10";
+    progressBar.style.width = "100%";
+  } else {
+    const watchedCount = items.filter((item) => state.watched.has(itemKey(item))).length;
+    const percent = Math.round((watchedCount / items.length) * 100);
+    progressLabel.textContent = `${watchedCount} of ${items.length} watched`;
+    progressPercent.textContent = `${percent}%`;
+    progressBar.style.width = `${percent}%`;
+  }
+  statusFilters.hidden = state.view === "favorites";
+  listKicker.textContent = state.view === "films" ? "Films" : state.view === "series" ? "Series" : "The 10/10 shelf";
+  listTitle.textContent = state.view === "films" ? "Your next feature" : state.view === "series" ? "Your next obsession" : "What great looks like";
 }
 
 function createCard(item) {
   const card = template.content.firstElementChild.cloneNode(true);
   const checkbox = card.querySelector(".check__input");
+  if (state.view === "favorites") {
+    const mark = document.createElement("div");
+    mark.className = "favorite-mark";
+    mark.setAttribute("aria-label", "Personal rating: 10 out of 10");
+    mark.textContent = "10";
+    card.querySelector(".check").replaceWith(mark);
+    card.querySelector(".card__rank").textContent = "Personal 10/10";
+    card.querySelector(".card__format").textContent = item.format;
+    card.querySelector(".card__title").textContent = `${item.title} (${item.year})`;
+    card.querySelector(".card__reason").textContent = item.reason;
+    card.querySelector(".card__links").append(createLink("View on IMDb", `https://www.imdb.com/title/${item.imdb}/`));
+    return card;
+  }
   const key = itemKey(item);
   checkbox.checked = state.watched.has(key);
   checkbox.setAttribute("aria-label", `Mark ${item.title} as watched`);
